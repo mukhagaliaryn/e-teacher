@@ -9,6 +9,8 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
 
     # apps...
+    path('accounts/', include('accounts.urls')),
+    path('', include('main.urls')),
 ]
 
 urlpatterns += [re_path(r'^i18n/', include('django.conf.urls.i18n'))]

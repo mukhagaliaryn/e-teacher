@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="w-full h-screen overflow-hidden grid lg:grid-cols-2">
+    <div class="w-full h-full bg-gray-100 hidden lg:flex justify-center items-center">
+        <div class="max-w-screen-sm px-5 w-full mx-auto flex flex-col gap-5 items-center text-center">
+            <a href="{% url 'home' %}" class="flex">
+                <img src="{% static 'images/e-teacher.png' %}" class="w-96" alt="">
+            </a>
+            <span class="text-gray-500">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                Est accusantium dolorem modi autem hic, iste mollitia 
+                veniam aliquid ut nostrum.
+            </span>
+        </div>
+        
+    </div>
+
+    <div class="overflow-auto p-5">
+        {% block layout_content %}
+        {% endblock layout_content %}
+    </div>
+</div>
+{% endblock content %}
