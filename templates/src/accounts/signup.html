@@ -4,16 +4,16 @@
 
 
 {% block title %}
-    Регистрация | GameMath
+    Тіркелу | e-Teacher
 {% endblock title %}
 
 
 {% block layout_content %}
 <div class="w-full h-full sm:max-w-screen-sm mx-auto flex flex-col justify-center gap-5">
     <a href="{% url 'home' %}" class="flex lg:hidden w-full justify-center">
-        <img src="{% static 'images/e-teacher.png' %}" class="w-64" alt="">
+        <img src="{% static 'images/e-teacher.svg' %}" class="w-64" alt="">
     </a>
-    <h1 class="text-2xl md:text-3xl lg:4xl font-bold text-center">Регистрация</h1>
+    <h1 class="text-2xl md:text-3xl lg:4xl font-semibold text-center">Жүйеге тіркелу</h1>
     <form method="post" class="w-full">
         {% csrf_token %}
         {{ form | crispy }}
@@ -25,7 +25,7 @@
                 <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                     <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
                 </svg>
-                <span>Регистрация</span>
+                <span>Тіркелу</span>
             </button>
         </div>
     </form>
