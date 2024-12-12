@@ -1,0 +1,21 @@
+/* Calendar */
+.day {
+    border-radius: 12px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all .3s;
+    color: #6b7280;
+}
+
+.day:hover {
+    background-color: #f3f4f6;
+}
+
+.today {
+    background-color: #2563eb;
+    color: white;
+}
+
+.today:hover {
+    background-color: #1b46a1;
+}

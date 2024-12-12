@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}e-Teacher{% endblock title %}</title>
     <link rel="shortcut icon" href="{% static '/images/icon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +32,6 @@
                         '100%': { transform: 'scale(2)', opacity: '0' },
                         },
                     },
-
                 },
                 fontFamily: {
                     inter: ['Inter Tight', 'sans-serif'],
@@ -43,14 +43,21 @@
     <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- SwiperJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <style>
-    </style>
-
+    <!-- daisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.19/dist/full.min.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="font-inter">
     {% block content %}
     {% endblock content %}
+
+    <!-- Scripts -->
+    <script src="{% static 'scripts/main-page.js' %}"></script>
+    <script src="{% static 'scripts/home-page.js' %}"></script>
 </body>
 </html>

@@ -19,18 +19,27 @@
                     />
                 </a>
                 <div class="flex md:gap-2 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                    <a 
-                        href="{% url 'login' %}" 
-                        class="hidden md:block px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                    >
-                        Порталға кіру
-                    </a>
-                    <a 
-                        href="{% url 'signup' %}"
-                        class="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Тіркелу
-                    </a>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'profile' %}">
+                            <img class="w-8 h-8 rounded-full"
+                                src="{% if user.profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user.png'%}{% endif %}"
+                                alt="user photo"
+                            >
+                        </a>
+                    {% else %}
+                        <a 
+                            href="{% url 'login' %}" 
+                            class="hidden md:block px-4 py-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                        >
+                            Порталға кіру
+                        </a>
+                        <a 
+                            href="{% url 'signup' %}"
+                            class="hidden md:block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            Тіркелу
+                        </a>
+                    {% endif %}
 
                     <button data-collapse-toggle="navbar-cta" type="button"
                         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -154,36 +163,5 @@
             </button>
         </div>
     </div>
-
-
-    <!-- Scripts -->
-    <script>
-        const messageBtn = document.getElementById('message-btn');
-        const closeBtn = document.getElementById('close-btn');
-        const menu = document.getElementById('menu');
-
-        messageBtn.addEventListener('click', (event) => {
-            menu.classList.remove('hidden');
-            menu.classList.add('flex');
-            messageBtn.classList.add('hidden');
-            event.stopPropagation();
-        });
-
-        closeBtn.addEventListener('click', (event) => {
-            menu.classList.add('hidden');
-            menu.classList.remove('flex');
-            event.stopPropagation();
-            messageBtn.classList.remove('hidden');
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!menu.contains(event.target) && !messageBtn.contains(event.target)) {
-                menu.classList.add('hidden');
-                menu.classList.remove('flex');
-                messageBtn.classList.remove('hidden');
-            }
-        });
-    </script>
 </div>
-
 {% endblock content %}

@@ -10,7 +10,7 @@
 
 {% block profile_content %}
 <div class="max-w-screen-sm grid gap-10">
-    <h2 class="text-2xl font-bold dark:text-white">Профильді өңдеу</h2>
+    <h2 class="text-2xl font-semibold dark:text-white">Профильді өңдеу</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form|crispy }}
