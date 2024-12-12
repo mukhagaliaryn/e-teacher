@@ -16,3 +16,14 @@ def home(request):
         'new_courses': new_courses
     }
     return render(request, 'home/index.html', context)
+
+
+# Courses view
+@login_required(login_url='/accounts/login/')
+def courses(request):
+    all_courses = [1, 2, 3, 4, 5]
+
+    context = {
+        'courses': all_courses
+    }
+    return render(request, 'home/courses.html', context)

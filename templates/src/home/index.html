@@ -8,13 +8,12 @@
 
 
 {% block home_content %}
-<div class="2xl:container mx-auto flex items-start flex-col gap-4 lg:flex-row ">
+<div class="2xl:container mx-auto flex items-start flex-col gap-4 lg:flex-row">
     <!-- Left side -->
     <!-- ================================================================================================================================================================================================================================================================================================================================================================================================================================= -->
     <div class="w-full 2xl:max-w-[1100px] grid gap-8">
         <!-- New courses -->
-        <div class="grid gap-4">
-            <!-- Title -->
+        <div class="grid gap-2 sm:gap-4">
             <h1 class="text-2xl font-semibold">Жаңадан шыққан курстар</h1>
 
             <!-- List -->
@@ -72,22 +71,22 @@
 
 
         <!-- My courses -->
-        <div class="grid gap-4">
+        <div class="grid gap-2 sm:gap-4">
             <div class="relative">
                 <h1 class="text-2xl font-semibold">Менің курстарым</h1>
             </div>
 
             <div class="grid gap-2">
                 {% for item in new_courses %}
-                    <a href="#" class="flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
+                    <a href="#" class="relative flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
                         <img
-                            class="w-48"
+                            class="w-32 md:w-36 lg:w-48"
                             src="{% static 'images/poster.png' %}" alt=""
                         >
 
                         <div class="flex-1 flex items-center justify-between py-2 px-4">
                             <div>
-                                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                                <h5 class="line-clamp-1 sm:line-clamp-none text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                                     Python программалау тілі
                                 </h5>
                                 <span class="text-gray-500">Программалау</span>
@@ -101,7 +100,7 @@
                             
                             
                             <div 
-                                class="radial-progress bg-gray-100 text-blue-600" 
+                                class="radial-progress bg-gray-100 text-blue-600 absolute left-8 sm:left-0 sm:relative" 
                                 style="--value: 45; --size:4rem;" 
                                 role="progressbar"
                             >
@@ -118,7 +117,7 @@
     <!-- ================================================================================================================================================================================================================================================================================================================================================================================================================================= -->
     <div class="hidden xl:grid gap-8 flex-1 min-w-[360px]">
         <!-- Profile -->
-        <div class="grid gap-4 bg-white">
+        <div class="grid gap-2 sm:gap-4">
             <h1 class="text-2xl font-semibold">Профиль</h1>
             <div class="flex flex-col items-center">
                 <img 
@@ -162,8 +161,8 @@
         </div>
 
 
-        <!-- Push -->
-        <div class="grid gap-2">
+        <!-- Tasks -->
+        <div class="grid gap-2 sm:gap-4">
             <h1 class="text-2xl font-semibold">Күндік жоспарлар</h1>
             <div class="grid gap-2">
                 {% for item in new_courses %}
@@ -219,7 +218,7 @@
             
             <div class="grid gap-8 flex-1">
                 <!-- Profile -->
-                <div class="grid gap-4 bg-white">
+                <div class="gap-2 sm:gap-4">
                     <h1 class="text-2xl font-semibold">Профиль</h1>
                     <div class="flex flex-col items-center">
                         <img 
