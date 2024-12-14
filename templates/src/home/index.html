@@ -12,105 +12,152 @@
     <!-- Left side -->
     <!-- ================================================================================================================================================================================================================================================================================================================================================================================================================================= -->
     <div class="w-full 2xl:max-w-[1100px] grid gap-8">
-        <!-- New courses -->
-        <div class="grid gap-2 sm:gap-4">
-            <h1 class="text-2xl font-semibold">Жаңадан шыққан курстар</h1>
+        <!-- Access subjects -->
+        {% if access_subjects|length > 0 %}
+            <div class="grid gap-2 sm:gap-4">
+                <h1 class="text-2xl font-semibold">Ашық пәндер</h1>
 
-            <!-- List -->
-            <div class="swiper mySwiper w-full">
-                <div class="swiper-wrapper">
-                    {% for item in new_courses %}
-                        <div class="swiper-slide">
-                            <div class="bg-white border border-gray-200 rounded-lg">
-                                <img class="rounded-t-lg" src="{% static 'images/poster.png' %}" alt="product image" />
-                                <div class="p-5">
-                                    <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                                        Python программалау тілі
-                                    </h5>
-                                    <span class="text-gray-500">Программалау</span>
-                                    <div class="flex items-center mt-2.5 mb-5">
-                                        <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                <!-- List -->
+                <div class="swiper mySwiper w-full">
+                    <div class="swiper-wrapper">
+                        {% for item in access_subjects %}
+                            <div class="swiper-slide">
+                                <div class="block bg-white border border-gray-200 rounded-lg transition-all hover:bg-gray-100">
+                                    <a href="{% url 'subject_detail' item.id %}">
+                                        <img 
+                                            class="rounded-t-lg" 
+                                            src="{% if item.poster %}{{ item.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" 
+                                            alt="product image" 
+                                        />
+                                    </a>
+                                    <div class="p-5">
+                                        <div class="flex gap-2">
+                                            <a href="{% url 'subject_detail' item.id %}">
+                                                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                                                    {{ item.title }}
+                                                </h5>
+                                            </a>
+                                            <svg class="w-6 h-6 text-green-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd" d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z" clip-rule="evenodd"/>
                                             </svg>
                                         </div>
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>
-                                    </div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex -space-x-4 rtl:space-x-reverse">
-                                            <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="">
-                                            <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-2.jpg" alt="">
-                                            <img class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="">
-                                            <a class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">+99</a>
+                                        <span class="text-gray-500">{{ category.name }}</span>
+                                        <div class="flex justify-between items-center mt-2.5 mb-5">
+                                            <div class="flex gap-2 items-center">
+                                                <svg class="w-6 h-6 text-blue-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M8.597 3.2A1 1 0 0 0 7.04 4.289a3.49 3.49 0 0 1 .057 1.795 3.448 3.448 0 0 1-.84 1.575.999.999 0 0 0-.077.094c-.596.817-3.96 5.6-.941 10.762l.03.049a7.73 7.73 0 0 0 2.917 2.602 7.617 7.617 0 0 0 3.772.829 8.06 8.06 0 0 0 3.986-.975 8.185 8.185 0 0 0 3.04-2.864c1.301-2.2 1.184-4.556.588-6.441-.583-1.848-1.68-3.414-2.607-4.102a1 1 0 0 0-1.594.757c-.067 1.431-.363 2.551-.794 3.431-.222-2.407-1.127-4.196-2.224-5.524-1.147-1.39-2.564-2.3-3.323-2.788a8.487 8.487 0 0 1-.432-.287Z"/>
+                                                </svg>
+                                                <div class="text-gray-500">
+                                                    <span class="">{{ item.chapters.count }} модуль</span>
+                                                    |
+                                                    <span class="">{{ item.lessons.count }} сабақ</span>
+                                                </div>
+                                            </div>
+        
+                                            <div class="flex items-center gap-2">
+                                                <svg class="w-6 h-6 text-blue-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                    <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z"/>
+                                                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                                </svg>
+                                                <span class="text-gray-500">{{ item.view }}</span>
+                                            </div>
                                         </div>
-
-                                        <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                            Толығырақ қарау
-                                        </a>
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex -space-x-4 rtl:space-x-reverse">
+                                                {% for user in item.observers.all %}
+                                                    <img 
+                                                        class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" 
+                                                        src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt=""
+                                                    >
+                                                {% endfor %}
+                                                <div class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">
+                                                    +{{ item.observers.count }}
+                                                </div>
+                                            </div>
+                                            
+                                            {% if item in add_subjects %}
+                                                <a 
+                                                    href="#" 
+                                                    class="flex gap-2 py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                                                >
+                                                    Сабаққа кіру
+                                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                                                    </svg>
+                                                </a>  
+                                            {% else %}
+                                                <form method="post" action="{% url 'home' %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="subject_id" value="{{ item.id }}">
+                                                    <button 
+                                                        type="submit"
+                                                        class="flex items-center gap-2 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                                    >
+                                                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                                                        </svg>
+                                                        Пәнді қосу
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- My subjects -->
+        {% if my_subjects|length > 0 %}
+            <div class="grid gap-2 sm:gap-4">
+                <div class="relative">
+                    <h1 class="text-2xl font-semibold">Менің пәндерім</h1>
+                </div>
+
+                <div class="grid gap-2">
+                    {% for item in my_subjects %}
+                        <a href="#" class="relative flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
+                            <img
+                                class="w-32 md:w-36 lg:w-48"
+                                src="{% if item.subject.poster %}{{ item.subject.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" 
+                            >
+
+                            <div class="flex-1 flex items-center justify-between py-2 px-4">
+                                <div>
+                                    <h5 class="line-clamp-1 sm:line-clamp-none text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                                        {{ item.subject.title }}
+                                    </h5>
+                                    <span class="text-gray-500">{{ item.subject.category.name }}</span>
+                                    <div class="flex gap-2 items-center">
+                                        <svg class="w-6 h-6 text-blue-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8.597 3.2A1 1 0 0 0 7.04 4.289a3.49 3.49 0 0 1 .057 1.795 3.448 3.448 0 0 1-.84 1.575.999.999 0 0 0-.077.094c-.596.817-3.96 5.6-.941 10.762l.03.049a7.73 7.73 0 0 0 2.917 2.602 7.617 7.617 0 0 0 3.772.829 8.06 8.06 0 0 0 3.986-.975 8.185 8.185 0 0 0 3.04-2.864c1.301-2.2 1.184-4.556.588-6.441-.583-1.848-1.68-3.414-2.607-4.102a1 1 0 0 0-1.594.757c-.067 1.431-.363 2.551-.794 3.431-.222-2.407-1.127-4.196-2.224-5.524-1.147-1.39-2.564-2.3-3.323-2.788a8.487 8.487 0 0 1-.432-.287Z"/>
+                                        </svg>
+                                        <div class="text-gray-500">
+                                            <span class="">{{ item.subject.chapters.count }} модуль</span>
+                                            |
+                                            <span class="">{{ item.subject.lessons.count }} сабақ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                <div 
+                                    class="radial-progress bg-gray-100 text-blue-600 absolute left-8 sm:left-0 sm:relative" 
+                                    style="--value: {{ item.total_percent }}; --size:4rem;" 
+                                    role="progressbar"
+                                >
+                                    {{ item.total_percent }}%
+                                </div>
+                            </div>
+                        </a>
                     {% endfor %}
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
-        </div>
-
-
-        <!-- My courses -->
-        <div class="grid gap-2 sm:gap-4">
-            <div class="relative">
-                <h1 class="text-2xl font-semibold">Менің курстарым</h1>
-            </div>
-
-            <div class="grid gap-2">
-                {% for item in new_courses %}
-                    <a href="#" class="relative flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
-                        <img
-                            class="w-32 md:w-36 lg:w-48"
-                            src="{% static 'images/poster.png' %}" alt=""
-                        >
-
-                        <div class="flex-1 flex items-center justify-between py-2 px-4">
-                            <div>
-                                <h5 class="line-clamp-1 sm:line-clamp-none text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-                                    Python программалау тілі
-                                </h5>
-                                <span class="text-gray-500">Программалау</span>
-                                <div class="flex items-center text-gray-500">
-                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 .087.586l2.977-7.937A1 1 0 0 1 6 10h12V9a2 2 0 0 0-2-2h-4.532l-1.9-2.28A2 2 0 0 0 8.032 4H4Zm2.693 8H6.5l-3 8H18l3-8H6.693Z" clip-rule="evenodd"/>
-                                    </svg>
-                                    <span>5 модуль | 20 сабақ</span>
-                                </div>
-                            </div>
-                            
-                            
-                            <div 
-                                class="radial-progress bg-gray-100 text-blue-600 absolute left-8 sm:left-0 sm:relative" 
-                                style="--value: 45; --size:4rem;" 
-                                role="progressbar"
-                            >
-                                45%
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
+        {% endif %}
     </div>
 
     <!-- Right side -->
@@ -163,7 +210,7 @@
 
         <!-- Tasks -->
         <div class="grid gap-2 sm:gap-4">
-            <h1 class="text-2xl font-semibold">Күндік жоспарлар</h1>
+            <h1 class="text-2xl font-semibold">Үй жұмыстары</h1>
             <div class="grid gap-2">
                 {% for item in new_courses %}
                     <div class="flex border p-4 rounded-lg">

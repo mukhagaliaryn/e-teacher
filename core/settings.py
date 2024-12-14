@@ -28,6 +28,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'main.apps.MainConfig',
+    'progress.apps.ProgressConfig',
 
 ]
 

@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
 
 
-class MainConfig(AppConfig):
+class ProgressConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'main'
-    verbose_name = _('Портал қосымшасы')
+    name = 'progress'
+    verbose_name = _('Статистика қосымшасы')
