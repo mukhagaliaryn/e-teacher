@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 
 
+# Category model
 class Category(models.Model):
     name = models.CharField(_('Атауы'), max_length=255)
     slug = models.SlugField(_('Кілттік атауы'), max_length=255, unique=True)
@@ -34,8 +35,10 @@ class Subject(models.Model):
     class Meta:
         verbose_name = _('Пән')
         verbose_name_plural = _('Пәндер')
+        ordering = ('-created_at', )
 
 
+# Chapter model
 class Chapter(models.Model):
     subject = models.ForeignKey(
         Subject, on_delete=models.CASCADE,
@@ -52,6 +55,7 @@ class Chapter(models.Model):
         verbose_name_plural = _('Модульдер')
 
 
+# Lesson model
 class Lesson(models.Model):
     LESSON_TYPE = (
         ('theory', _('Теориялық сабақ')),
@@ -81,6 +85,7 @@ class Lesson(models.Model):
         verbose_name_plural = _('Сабақтар')
 
 
+# TextContent model
 class TextContent(models.Model):
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,
@@ -96,6 +101,7 @@ class TextContent(models.Model):
         verbose_name_plural = _('Мәтін контенттер')
 
 
+# VideoContent model
 class VideoContent(models.Model):
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,
@@ -112,6 +118,7 @@ class VideoContent(models.Model):
         verbose_name_plural = _('Видео контенттер')
 
 
+# FrameContent model
 class FrameContent(models.Model):
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,
@@ -127,6 +134,7 @@ class FrameContent(models.Model):
         verbose_name_plural = _('Фрейм контенттер')
 
 
+# Homeworks
 class Homework(models.Model):
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,
@@ -150,6 +158,7 @@ class Homework(models.Model):
         verbose_name_plural = _('Үй жұмыстары')
 
 
+# Comments
 class Comment(models.Model):
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE,

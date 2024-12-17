@@ -3,29 +3,30 @@
 
 
 {% block content %}
+<div class="h-screen flex flex-col">
     <!-- Alerts -->
     {% if messages %}
-        <ul class="messages fixed z-50 bottom-5 right-5">
-            {% for message in messages %}
-            <li class="">
-                <div class="alert {% if message.tags == 'success' %}bg-green-50 text-green-800{% else %}bg-red-50 text-red-800{% endif %} flex items-center p-4 mb-4"
-                    role="alert">
-                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                    </svg>
-                    <div>
-                        {{ message }}
-                    </div>
+    <ul class="messages fixed z-50 bottom-5 right-5">
+        {% for message in messages %}
+        <li class="">
+            <div class="alert {{ message.tags }} flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-100"
+                role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                </svg>
+                <div>
+                    {{ message }}
                 </div>
-            </li>
-            {% endfor %}
-        </ul>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
     {% endif %}
 
     <!-- Header nav -->
-    <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+    <nav class="sticky top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <!-- Logo -->
@@ -45,8 +46,8 @@
                         <img src="{% static 'images/e-teacher.svg' %}" class="h-8 me-3" alt="e-Teacher Logo" />
                     </a>
                 </div>
-                
-                
+
+
                 <!-- User settings -->
                 <div class="flex items-center gap-4">
                     <!-- Account -->
@@ -58,8 +59,7 @@
                                 <span class="sr-only">Open user menu</span>
                                 <img class="w-8 h-8 rounded-full"
                                     src="{% if user.profile.avatar %}{{ user_profile.avatar.url }}{% else %}{% static '/images/user.png'%}{% endif %}"
-                                    alt="user photo"
-                                >
+                                    alt="user photo">
                             </button>
                         </div>
                         <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -91,10 +91,8 @@
                                 <li>
                                     <form method="post" action="{% url 'logout' %}" class="w-full">
                                         {% csrf_token %}
-                                        <button 
-                                            type="submit"
-                                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                        >
+                                        <button type="submit"
+                                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             Жүйеден шығу
                                         </button>
                                     </form>
@@ -107,48 +105,10 @@
         </div>
     </nav>
 
-    <!-- Sidebar -->
-    <aside id="logo-sidebar"
-        class="fixed top-0 left-0 z-40 w-64 2xl:w-80 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-        aria-label="Sidebar">
-        <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-            <ul class="space-y-2 font-medium">
-                <li>
-                    <a href="{% url 'home' %}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {% if request.path == '/home/' %}bg-gray-100{% endif %}">
-                        <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                            viewBox="0 0 22 21">
-                            <path
-                                d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
-                            <path
-                                d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
-                        </svg>
-                        <span class="ms-3">Басты бет</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'subjects' %}"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group {% if request.path == '/subjects/' %}bg-gray-100{% endif %}">
-                        <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                            viewBox="0 0 18 18">
-                            <path
-                                d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z" />
-                        </svg>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Барлық пәндер</span>
-                        <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </aside>
-
     <!-- Data -->
-    <div class="p-4 sm:ml-64 2xl:ml-80">
-        <div class="mt-14">
-            {% block home_content %}
-            {% endblock home_content %}
-        </div>
+    <div class="flex-1">
+        {% block course_content %}
+        {% endblock course_content %}
     </div>
+</div>
 {% endblock content %}

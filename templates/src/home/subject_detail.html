@@ -10,6 +10,7 @@
 {% block home_content %}
 <div class="2xl:container grid gap-8 mx-auto">
     <!-- Detail -->
+    <!-- ================================================================================================================================================================= -->
     <div class="flex gap-4 md:gap-8 flex-col-reverse xl:flex-row justify-between items-start p-4 md:p-16 bg-gray-100">
         <div class="flex-1 grid gap-4">
             <div class="grid">
@@ -57,7 +58,7 @@
                 {% if request.user in subject.observers.all %}
                     {% if subject in add_subjects %}
                         <a 
-                            href="#" 
+                            href="{% url 'lesson_detail' first_user_subject.id first_user_lesson.id %}" 
                             class="flex gap-2 py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                         >
                             Сабаққа кіру
@@ -66,7 +67,7 @@
                             </svg>
                         </a>   
                     {% else %}
-                        <form method="post" action="{% url 'home' %}">
+                        <form method="post" action="{% url 'subject_detail' subject.id %}">
                             {% csrf_token %}
                             <input type="hidden" name="subject_id" value="{{ subject.id }}">
                             <button 
@@ -98,6 +99,7 @@
     </div>
 
     <!-- Subject chapters -->
+    <!-- ================================================================================================================================================================= -->
     <div class="max-w-screen-lg w-full grid gap-4">
         <h1 class="text-xl md:text-2xl font-semibold">Пәннің жоспары</h1>
         <div class="grid gap-2">

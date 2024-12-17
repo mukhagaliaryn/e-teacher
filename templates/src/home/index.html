@@ -1,5 +1,6 @@
 {% extends 'layouts/home.html' %}
 {% load static %}
+{% load custom_filters %}
 
 
 {% block title %}
@@ -120,7 +121,7 @@
 
                 <div class="grid gap-2">
                     {% for item in my_subjects %}
-                        <a href="#" class="relative flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
+                        <a href="{% url 'lesson_detail' item.id first_lesson_ids|get_item:item.id %}" class="relative flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
                             <img
                                 class="w-32 md:w-36 lg:w-48"
                                 src="{% if item.subject.poster %}{{ item.subject.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" 
@@ -143,8 +144,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
+
                                 <div 
                                     class="radial-progress bg-gray-100 text-blue-600 absolute left-8 sm:left-0 sm:relative" 
                                     style="--value: {{ item.total_percent }}; --size:4rem;" 
@@ -169,7 +169,7 @@
             <div class="flex flex-col items-center">
                 <img 
                     class="w-36 h-36 mb-3 rounded-full shadow-lg" 
-                    src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"
+                    src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt="{{ request.user }}"
                 />
                 <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
                 <span class="text-sm text-gray-500 dark:text-gray-400">Педагог, информатика</span>
@@ -208,11 +208,11 @@
         </div>
 
 
-        <!-- Tasks -->
+        <!-- Homeworks -->
         <div class="grid gap-2 sm:gap-4">
             <h1 class="text-2xl font-semibold">Үй жұмыстары</h1>
             <div class="grid gap-2">
-                {% for item in new_courses %}
+                {% for item in my_subjects %}
                     <div class="flex border p-4 rounded-lg">
                         <div class="flex items-center h-5">
                             <input 
@@ -235,7 +235,7 @@
     </div>
     
 
-    <!-- Absolute drawer -->
+    <!-- Fixed drawer -->
     <!-- ================================================================================================================================================================================================================================================================================================================================================================================================================================= -->
     <div>
         <div class="text-center xl:hidden">
@@ -265,23 +265,23 @@
             
             <div class="grid gap-8 flex-1">
                 <!-- Profile -->
-                <div class="gap-2 sm:gap-4">
+                <div class="grid gap-2 sm:gap-4">
                     <h1 class="text-2xl font-semibold">Профиль</h1>
                     <div class="flex flex-col items-center">
                         <img 
                             class="w-36 h-36 mb-3 rounded-full shadow-lg" 
-                            src="https://flowbite.com/docs/images/people/profile-picture-3.jpg" alt="Bonnie image"
+                            src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt="{{ request.user }}"
                         />
-                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Bonnie Green</h5>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">Visual Designer</span>
+                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">{{ request.user.first_name }} {{ request.user.last_name }}</h5>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Педагог, информатика</span>
                     </div>
                 </div>
         
-                <!-- Push -->
+                <!-- Homeworks -->
                 <div class="grid gap-2">
-                    <h1 class="text-2xl font-semibold">Күндік жоспарлар</h1>
+                    <h1 class="text-2xl font-semibold">Үй жұмыстары</h1>
                     <div class="grid gap-2">
-                        {% for item in new_courses %}
+                        {% for item in my_subjects %}
                             <div class="flex border p-4 rounded-lg">
                                 <div class="flex items-center h-5">
                                     <input 

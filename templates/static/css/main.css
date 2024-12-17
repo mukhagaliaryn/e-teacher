@@ -19,3 +19,15 @@
 .today:hover {
     background-color: #1b46a1;
 }
+
+/* Alerts */
+.success {
+    background-color: #dcfce7;
+    color: #166534;
+
+}
+
+.error {
+    background-color: #fdf2f2;
+    color: #9b1c1c;
+}

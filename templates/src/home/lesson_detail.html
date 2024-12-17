@@ -1,0 +1,254 @@
+{% extends 'layouts/lessons.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+    {{ user_lesson.lesson.title }}
+{% endblock title %}
+
+
+{% block course_content %}
+<div class="flex items-start h-full">
+    <!-- Left side -->
+    <!-- ================================================================================================================================================================= -->
+    <div class="flex-1 bg-gray-100 h-full overflow-y-auto">
+        <div class="h-[80%] relative">
+            <div id="animation-carousel" class="relative w-full h-full" data-carousel="static">
+                <!-- Carousel wrapper -->
+                <div class="relative overflow-hidden h-full">
+                    <!-- TextContens -->
+                    <div class="hidden duration-200 ease-linear" data-carousel-item>
+                        <div class="h-full bg-white p-8">
+                            {% if user_lesson.lesson.text_contents.all|length > 0 %}
+                                {% for item in user_lesson.lesson.text_contents.all %}
+                                    <div>
+                                        {{ item.content|safe }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="hidden duration-200 ease-linear" data-carousel-item>
+                        <div class="h-full bg-black">
+                            {% if user_lesson.lesson.video_contents.all|length > 0 %}
+                                {% for item in user_lesson.lesson.video_contents.all %}
+                                    <iframe 
+                                        width="100%" 
+                                        height="100%" 
+                                        src="https://www.youtube.com/embed/{{ item.url|youtube_id }}" 
+                                        title="YouTube video player" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowfullscreen
+                                    >
+                                    </iframe>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- Slider controls -->
+                <button type="button"
+                    class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    data-carousel-prev>
+                    <span
+                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-800 group-hover:bg-blue-500  group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 1 1 5l4 4" />
+                        </svg>
+                        <span class="sr-only">Previous</span>
+                    </span>
+                </button>
+                <button type="button"
+                    class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                    data-carousel-next>
+                    <span
+                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-800 group-hover:bg-blue-500  group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
+                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="sr-only">Next</span>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Done buttons -->
+            <button 
+                type="button" 
+                class="absolute bottom-0 z-30 right-0 py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+            >
+                Үй жұмысына өту
+            </button>
+        </div>
+
+        
+        <!-- Lesson description -->
+        <div class="w-full bg-white border-y border-gray-200">
+            <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 bg-gray-50"
+                id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
+                <li class="me-2">
+                    <button id="about-tab" data-tabs-target="#about" type="button" role="tab" aria-controls="about"
+                        aria-selected="true"
+                        class="inline-block p-4 text-blue-600 rounded-ss-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500"
+                    >Сабақ жайлы</button>
+                </li>
+                <li class="me-2">
+                    <button id="services-tab" data-tabs-target="#services" type="button" role="tab" aria-controls="services"
+                        aria-selected="false"
+                        class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">Services</button>
+                </li>
+                <li class="me-2">
+                    <button id="statistics-tab" data-tabs-target="#statistics" type="button" role="tab"
+                        aria-controls="statistics" aria-selected="false"
+                        class="inline-block p-4 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-gray-300">Facts</button>
+                </li>
+            </ul>
+
+            <div id="defaultTabContent">
+                <!-- About -->
+                <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="about" role="tabpanel"
+                    aria-labelledby="about-tab">
+                    <h2 class="mb-3 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+                        {{ user_lesson.lesson.title }}    
+                    </h2>
+                    <div class="mb-3 text-gray-500 dark:text-gray-400">
+                        {{ user_lesson.lesson.description|safe }}
+                    </div>
+                    <a href="#"
+                        class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
+                        Толығырақ
+                        <svg class=" w-2.5 h-2.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 9 4-4-4-4" />
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="services" role="tabpanel"
+                    aria-labelledby="services-tab">
+                    <h2 class="mb-5 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">We invest in the
+                        world’s potential</h2>
+                    <!-- List -->
+                    <ul role="list" class="space-y-4 text-gray-500 dark:text-gray-400">
+                        <li class="flex space-x-2 rtl:space-x-reverse items-center">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            <span class="leading-tight">Dynamic reports and dashboards</span>
+                        </li>
+                        <li class="flex space-x-2 rtl:space-x-reverse items-center">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            <span class="leading-tight">Templates for everyone</span>
+                        </li>
+                        <li class="flex space-x-2 rtl:space-x-reverse items-center">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            <span class="leading-tight">Development workflow</span>
+                        </li>
+                        <li class="flex space-x-2 rtl:space-x-reverse items-center">
+                            <svg class="flex-shrink-0 w-3.5 h-3.5 text-blue-600 dark:text-blue-500" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                            </svg>
+                            <span class="leading-tight">Limitless business automation</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="statistics" role="tabpanel"
+                    aria-labelledby="statistics-tab">
+                    <dl
+                        class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-gray-900 sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
+                        <div class="flex flex-col">
+                            <dt class="mb-2 text-3xl font-extrabold">73M+</dt>
+                            <dd class="text-gray-500 dark:text-gray-400">Developers</dd>
+                        </div>
+                        <div class="flex flex-col">
+                            <dt class="mb-2 text-3xl font-extrabold">100M+</dt>
+                            <dd class="text-gray-500 dark:text-gray-400">Public repositories</dd>
+                        </div>
+                        <div class="flex flex-col">
+                            <dt class="mb-2 text-3xl font-extrabold">1000s</dt>
+                            <dd class="text-gray-500 dark:text-gray-400">Open source projects</dd>
+                        </div>
+                    </dl>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Right side -->
+    <!-- ================================================================================================================================================================= -->
+    <div class="max-w-md w-full h-full grid gap-4 border-l">
+        <div id="accordion-collapse" data-accordion="collapse" class="overflow-hidden">
+            {% for item in chapters_with_lessons %}
+                <h2 id="accordion-collapse-heading-{{ item.chapter.id }}">
+                    <button 
+                        type="button"
+                        class="flex justify-between text-lg w-full p-5 text-left font-medium text-gray-500 border-b border-gray-200 focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 gap-3"
+                        data-accordion-target="#accordion-collapse-body-{{ item.chapter.id }}" aria-expanded="true"
+                        aria-controls="accordion-collapse-body-{{ item.chapter.id }}"
+                    >
+                        <span>{{ forloop.counter }} модуль: {{ item.chapter.title }}</span>
+                        <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5 5 1 1 5" />
+                        </svg>
+                    </button>
+                </h2>
+                <div id="accordion-collapse-body-{{ item.chapter.id }}" class="hidden" aria-labelledby="accordion-collapse-heading-{{ item.chapter.id }}">
+                    <div class="border-gray-200">
+                        {% for user_lesson in item.user_lessons %}
+                            {% url 'lesson_detail' user_subject.id user_lesson.id as lesson_url %}
+                            <a 
+                                href="{% url 'lesson_detail' user_subject.id user_lesson.id %}"
+                                class="flex items-start justify-between gap-4 p-4 border-b transition-all hover:bg-gray-100 {% if request.path == lesson_url %}bg-blue-100 hover:bg-blue-100{% endif %}"
+                            >
+                                <div class="flex items-center gap-2">
+                                    <div>
+                                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd" d="M19.003 3A2 2 0 0 1 21 5v2h-2V5.414L17.414 7h-2.828l2-2h-2.172l-2 2H9.586l2-2H9.414l-2 2H3V5a2 2 0 0 1 2-2h14.003ZM3 9v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H3Zm2-2.414L6.586 5H5v1.586Zm4.553 4.52a1 1 0 0 1 1.047.094l4 3a1 1 0 0 1 0 1.6l-4 3A1 1 0 0 1 9 18v-6a1 1 0 0 1 .553-.894Z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h1 class="font-medium">{{ user_lesson.lesson.title }}</h1>
+                                        <span class="block text-gray-500">{{ user_lesson.lesson.get_lesson_type_display }}</span>
+                                    </div>
+                                
+
+                                </div>
+                                
+                                <div class="flex gap-2 items-center text-gray-500">
+                                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                    </svg>
+                                    <span class="">{{ user_lesson.lesson.duration }}:00</span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock course_content %}
