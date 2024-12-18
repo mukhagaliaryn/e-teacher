@@ -85,6 +85,23 @@ class Lesson(models.Model):
         verbose_name_plural = _('Сабақтар')
 
 
+# LessonDoc model
+class LessonDocs(models.Model):
+    lesson = models.ForeignKey(
+        Lesson, on_delete=models.CASCADE,
+        verbose_name=_('Сабақ'), related_name="docs"
+    )
+    title = models.CharField(_('Тақырыбы'), max_length=255)
+    file = models.FileField(_('Файл'), upload_to='main/lesson/docs/', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title}"
+
+    class Meta:
+        verbose_name = _('Сабақ құжаты')
+        verbose_name_plural = _('Сабақ құжаттары')
+
+
 # TextContent model
 class TextContent(models.Model):
     lesson = models.ForeignKey(

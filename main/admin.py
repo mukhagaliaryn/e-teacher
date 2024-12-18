@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Category, Subject, Chapter, Lesson, TextContent, VideoContent, Comment, Homework, FrameContent
+from .models import Category, Subject, Chapter, Lesson, TextContent, VideoContent, Comment, Homework, FrameContent, \
+    LessonDocs
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 
 
@@ -48,12 +49,17 @@ class FrameContentTab(admin.TabularInline):
     extra = 1
 
 
+class FileDocTab(admin.TabularInline):
+    model = LessonDocs
+    extra = 1
+
+
 @admin.register(Lesson)
 class LessonAdmin(SummernoteModelAdmin):
     list_display = ('title', 'chapter', 'order')
-    list_filter = ('chapter',)
+    list_filter = ('subject', 'chapter',)
     ordering = ('chapter', 'order')
-    inlines = (VideoContentTab, TextContentTab, FrameContentTab, )
+    inlines = (VideoContentTab, TextContentTab, FrameContentTab, FileDocTab, )
 
 
 @admin.register(Comment)
