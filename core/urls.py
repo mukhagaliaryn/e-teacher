@@ -11,6 +11,7 @@ urlpatterns = [
     # apps...
     path('accounts/', include('accounts.urls')),
     path('', include('main.urls')),
+    path('books/', include('books.urls')),
 ]
 
 urlpatterns += [re_path(r'^i18n/', include('django.conf.urls.i18n'))]

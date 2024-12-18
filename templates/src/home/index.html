@@ -16,7 +16,7 @@
         <!-- Access subjects -->
         {% if access_subjects|length > 0 %}
             <div class="grid gap-2 sm:gap-4">
-                <h1 class="text-2xl font-semibold">Ашық пәндер</h1>
+                <h1 class="text-2xl font-semibold">Ашық пән бағдарламасы (Syllabus)</h1>
 
                 <!-- List -->
                 <div class="swiper mySwiper w-full">
@@ -78,10 +78,10 @@
                                             
                                             {% if item in add_subjects %}
                                                 <a 
-                                                    href="#" 
+                                                    href="{% url 'subject_detail' item.id %}" 
                                                     class="flex gap-2 py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                                                 >
-                                                    Сабаққа кіру
+                                                    Пәнге кіру
                                                     <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
                                                     </svg>
@@ -116,7 +116,7 @@
         {% if my_subjects|length > 0 %}
             <div class="grid gap-2 sm:gap-4">
                 <div class="relative">
-                    <h1 class="text-2xl font-semibold">Менің пәндерім</h1>
+                    <h1 class="text-2xl font-semibold">Менім пәндерім (Syllabus)</h1>
                 </div>
 
                 <div class="grid gap-2">
@@ -210,7 +210,7 @@
 
         <!-- Homeworks -->
         <div class="grid gap-2 sm:gap-4">
-            <h1 class="text-2xl font-semibold">Үй жұмыстары</h1>
+            <h1 class="text-2xl font-semibold">СӨЖ тапсыру мерзімі</h1>
             <div class="grid gap-2">
                 {% for item in my_subjects %}
                     <div class="flex border p-4 rounded-lg">
