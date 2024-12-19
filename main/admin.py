@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Subject, Chapter, Lesson, TextContent, VideoContent, Comment, Homework, FrameContent, \
+from .models import Category, Subject, Chapter, Lesson, TextContent, VideoContent, FrameContent, \
     LessonDocs
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 
@@ -11,6 +11,7 @@ class CategoryAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
+# Subject admin
 class ChapterTab(admin.TabularInline):
     model = Chapter
     extra = 1
@@ -24,6 +25,7 @@ class SubjectAdmin(SummernoteModelAdmin):
     inlines = (ChapterTab, )
 
 
+# Chapter admin
 class LessonTab(SummernoteModelAdminMixin, admin.StackedInline):
     model = Lesson
     extra = 1
@@ -36,22 +38,23 @@ class ChapterAdmin(SummernoteModelAdmin):
     inlines = (LessonTab, )
 
 
+# Lesson admin
 class TextContentTab(SummernoteModelAdminMixin, admin.TabularInline):
     model = TextContent
-    extra = 1
+    extra = 0
 
 class VideoContentTab(admin.TabularInline):
     model = VideoContent
-    extra = 1
+    extra = 0
 
 class FrameContentTab(admin.TabularInline):
     model = FrameContent
-    extra = 1
+    extra = 0
 
 
 class FileDocTab(admin.TabularInline):
     model = LessonDocs
-    extra = 1
+    extra = 0
 
 
 @admin.register(Lesson)
@@ -60,18 +63,3 @@ class LessonAdmin(SummernoteModelAdmin):
     list_filter = ('subject', 'chapter',)
     ordering = ('chapter', 'order')
     inlines = (VideoContentTab, TextContentTab, FrameContentTab, FileDocTab, )
-
-
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
-    list_display = ('lesson', 'author', 'created_at', 'content')
-    search_fields = ('author', 'content')
-    list_filter = ('lesson', 'created_at')
-
-
-@admin.register(Homework)
-class HomeworkAdmin(admin.ModelAdmin):
-    list_display = ('lesson', 'student', 'submitted_at', 'grade')
-    search_fields = ('student',)
-    list_filter = ('lesson', 'submitted_at')
-    ordering = ('-submitted_at',)

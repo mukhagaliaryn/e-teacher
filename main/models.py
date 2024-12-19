@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
+from accounts.models import User
 
 
 # Category model
@@ -141,7 +141,7 @@ class FrameContent(models.Model):
         Lesson, on_delete=models.CASCADE,
         verbose_name=_('Сабақ'), related_name="frame_contents"
     )
-    url = models.URLField(_('URL сілтеме'))
+    url = models.TextField(_('URL сілтеме'))
 
     def __str__(self):
         return f"Фреймконтент: {self.lesson.title}"
@@ -149,48 +149,3 @@ class FrameContent(models.Model):
     class Meta:
         verbose_name = _('Фрейм контент')
         verbose_name_plural = _('Фрейм контенттер')
-
-
-# Homeworks
-class Homework(models.Model):
-    lesson = models.ForeignKey(
-        Lesson, on_delete=models.CASCADE,
-        verbose_name=_('Сабақ'), related_name='homeworks'
-    )
-    student = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        verbose_name=_('Білім алушы'), related_name='homeworks'
-    )
-    submission = models.FileField(_('Тапсырма'), upload_to='main/subject/homeworks/')
-    grade = models.DecimalField(_('Балл'), max_digits=5, decimal_places=2, blank=True, null=True)
-    feedback = models.TextField(_('Пікір'), blank=True, null=True)
-    submitted_at = models.DateTimeField(auto_now_add=True)
-    is_done = models.BooleanField(_('Орындалды'), default=True)
-
-    def __str__(self):
-        return f"{self.student} {self.lesson.title} тақырыбындағы үй жұмысы"
-
-    class Meta:
-        verbose_name = _('Үй жұмысы')
-        verbose_name_plural = _('Үй жұмыстары')
-
-
-# Comments
-class Comment(models.Model):
-    lesson = models.ForeignKey(
-        Lesson, on_delete=models.CASCADE,
-        verbose_name=_('Сабақ'), related_name='comments'
-    )
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        verbose_name=_('Авторы'), related_name='comments'
-    )
-    content = models.TextField(_('Пікір'))
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.author} {self.lesson.title} сабағына берген пікірі"
-
-    class Meta:
-        verbose_name = _('Пікір')
-        verbose_name_plural = _('Пікірлер')

@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.contrib.auth.forms import AuthenticationForm
 
 
-# UserLoginForm
+# User login form
 class UserLoginForm(AuthenticationForm):
     username = forms.CharField(
         label='Қолданушының аты',
@@ -21,7 +21,7 @@ class UserLoginForm(AuthenticationForm):
     )
 
 
-# UserForm
+# User register form
 class UserForm(UserCreationForm):
     email = forms.EmailField(
         label='Электронды пошта',
@@ -53,8 +53,15 @@ class UserForm(UserCreationForm):
         fields = ('username', 'first_name', 'last_name', 'email', )
 
 
-# ProfileUpdate
-class ProfileUpdateForm(forms.ModelForm):
+# User update
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Электронды пошта',
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'example@gmail.com'
+        })
+    )
+
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name' )
+        fields = ('avatar', 'email', 'first_name', 'last_name', 'profession', )

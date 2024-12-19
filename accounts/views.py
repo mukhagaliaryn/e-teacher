@@ -4,8 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from accounts.forms import UserForm, ProfileUpdateForm
-from django.contrib.auth.models import User
+from accounts.forms import UserForm, UserUpdateForm
+from accounts.models import User
 
 
 # Signup
@@ -28,7 +28,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
 # Edit profile
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
-    form_class = ProfileUpdateForm
+    form_class = UserUpdateForm
     template_name = 'accounts/edit_profile.html'
     success_url = reverse_lazy('profile')
 

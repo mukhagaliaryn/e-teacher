@@ -12,87 +12,231 @@
     <!-- Left side -->
     <!-- ================================================================================================================================================================= -->
     <div class="flex-1 bg-gray-100 h-full overflow-y-auto">
-        <div class="h-[80%] relative">
-            <div id="animation-carousel" class="relative w-full h-full" data-carousel="static">
-                <!-- Carousel wrapper -->
-                <div class="relative overflow-hidden h-full">
-                    <!-- TextContens -->
-                    <div class="hidden duration-200 ease-linear" data-carousel-item>
-                        <div class="h-full bg-white p-8">
-                            {% if user_lesson.lesson.text_contents.all|length > 0 %}
-                                {% for item in user_lesson.lesson.text_contents.all %}
-                                    <div>
-                                        {{ item.content|safe }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+        <div class="w-full h-[720px] overflow-hidden bg-white">
+            <div class="swiper lessonSwiper swiper-h w-full h-full">
+                <div class="swiper-wrapper">
+                    <!-- Text contents -->
+                    {% if user_lesson.lesson.text_contents.all|length > 0 %}
+                        <div class="swiper-slide">
+                            <div class="swiper lessonSwiper2 swiper-v w-full h-full">
+                                <div class="swiper-wrapper">
+                                    {% for item in user_lesson.lesson.text_contents.all %}
+                                        <div class="swiper-slide w-full h-full flex justify-center items-center">
+                                            <div class="max-w-screen-xl w-full grid gap-4">
+                                                <h1 class="text-2xl font-semibold text-center">Теориялық мәлімет</h1>
+                                                <div class="text-gray-500 text-justify">
+                                                    {{ item.content|safe }}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
                         </div>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="hidden duration-200 ease-linear" data-carousel-item>
-                        <div class="h-full bg-black">
-                            {% if user_lesson.lesson.video_contents.all|length > 0 %}
-                                {% for item in user_lesson.lesson.video_contents.all %}
-                                    <iframe 
-                                        width="100%" 
-                                        height="100%" 
-                                        src="https://www.youtube.com/embed/{{ item.url|youtube_id }}" 
-                                        title="YouTube video player" 
-                                        frameborder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowfullscreen
+                    {% endif %}
+
+                    <!-- Video contents -->
+                    {% if user_lesson.lesson.video_contents.all|length > 0 %}
+                        <div class="swiper-slide">
+                            <div class="swiper lessonSwiper2 swiper-v w-full h-full">
+                                <div class="swiper-wrapper">
+                                    {% for item in user_lesson.lesson.video_contents.all %}
+                                        <div class="swiper-slide relative">
+                                            <div class="h-full w-96 bg-transparent z-50 absolute top-0 left-0"></div>
+                                            <iframe 
+                                                width="100%" 
+                                                height="100%" 
+                                                src="https://www.youtube.com/embed/{{ item.url|youtube_id }}" 
+                                                title="YouTube video player" 
+                                                frameborder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                allowfullscreen
+                                                class="cursor-pointer"
+                                            >
+                                            </iframe>
+                                            <div class="h-full w-96 absolute bg-transparent z-50 top-0 right-0"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Frame contents -->
+                    {% if user_lesson.lesson.frame_contents.all|length > 0 %}
+                        <div class="swiper-slide">
+                            <div class="swiper lessonSwiper2 swiper-v w-full h-full">
+                                <div class="swiper-wrapper">
+                                    {% for item in user_lesson.lesson.frame_contents.all %}
+                                        <div class="swiper-slide relative">
+                                            <div class="h-full w-96 bg-transparent z-50 absolute top-0 left-0"></div>
+                                            <iframe 
+                                                width="100%" 
+                                                height="100%" 
+                                                src="https://www.youtube.com/embed/{{ item.url|youtube_id }}" 
+                                                title="YouTube video player" 
+                                                frameborder="0" 
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                allowfullscreen
+                                                class="cursor-pointer"
+                                            >
+                                            </iframe>
+                                            <div class="h-full w-96 absolute bg-transparent z-50 top-0 right-0"></div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Homeworks/Finish lesson -->
+                    <div class="swiper-slide w-full h-full flex justify-center items-center">
+                        {% if user_lesson.completed %}
+                            <div class="max-w-md w-full text-center">
+                                <svg class="w-24 h-24 mx-auto text-green-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z"/>
+                                </svg>
+                                <h1 class="text-2xl font-semibold">Сабақ аяқталды!</h1>
+                                <div class="text-4xl fon-bold font-bold my-4">
+                                    {{ user_lesson.lesson_score }}/100%
+                                </div>
+
+                                {% if next_user_lesson %}
+                                    <a 
+                                        href="{% url 'lesson_detail' user_subject.id next_user_lesson.id %}"
+                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     >
-                                    </iframe>
-                                {% endfor %}
+                                        Келесі сабақ
+                                    </a>
+                                {% else %}
+                                    <a 
+                                        href="{% url 'home' %}"
+                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                    >
+                                        Басты бетке қайту
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            {% if user_lesson.lesson.homeworks.all|length > 0 %}
+                                <div class="swiper lessonSwiper2 swiper-v w-full h-full">
+                                    <div class="swiper-wrapper">
+                                        {% for homework in user_lesson.lesson.homeworks.all %}
+                                            <div class="swiper-slide relative w-full h-full flex justify-center items-center">
+                                                <div class="grid gap-8 max-w-screen-md w-full text-center">
+                                                    <div class="grid gap-4">
+                                                        <h1 class="text-2xl font-semibold">Үй тапсырмасы: {{ homework.title }}</h1>
+                                                        {% if homework.homeworks.all|length > 0 %}
+                                                            <span class="text-gray-500">
+                                                                Куратордың сіз жіберген тапсырмаларға қойылатын бағасын күтіңіз!
+                                                            </span>
+                                                        {% endif %}
+                                                        <div class="text-gray-500 text-justify">
+                                                            {{ homework.content|safe }}
+                                                        </div>
+                                                    </div>
+        
+                                                    {% if homework in send_homeworks %}
+                                                        <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                                                            role="alert">
+                                                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                                fill="currentColor" viewBox="0 0 20 20">
+                                                                <path
+                                                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                                                            </svg>
+                                                            <span class="sr-only">Info</span>
+                                                            <div>
+                                                                Тапсырма жіберілді!
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
+                                                        <!-- Форма для отправки домашней работы -->
+                                                        <form 
+                                                            method="post" enctype="multipart/form-data"
+                                                            class="grid gap-2"    
+                                                        >
+                                                            {% csrf_token %}
+                                                            <div>
+                                                                <input type="hidden" name="action" value="submit_homework">
+                                                                <input type="hidden" name="homework_id" value="{{ homework.id }}">
+                                                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Құжат жүктеу</label>
+                                                                <input 
+                                                                    id="file_input" 
+                                                                    name="user_homework_file" 
+                                                                    type="file" required
+                                                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                                >
+                                                            </div>
+                                                            
+                                                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                                                Тапсырманы жіберу
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
+                                                </div>
+
+                                                <form method="post" class="absolute bottom-4 right-4">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="complete_lesson">
+                                                    <button 
+                                                        type="submit" 
+                                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                        Сабақты аяқтау
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            {% else %}
+                                <div class="max-w-md w-full grid gap-4 text-center">
+                                    <div class="">
+                                        <h1 class="text-2xl font-semibold">Үй тапсырмасы жоқ</h1>
+                                        <span class="text-gray-500">Сабақты аяқтай берсеңіз болады!</span>
+                                    </div>
+                                    
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="complete_lesson">
+                                        <button 
+                                            type="submit" 
+                                            class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                            Сабақты аяқтау
+                                        </button>
+                                    </form>
+                                </div>
                             {% endif %}
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
-
-                <!-- Slider controls -->
-                <button 
-                    type="button"
-                    class="absolute top-1/2 start-0 z-30 flex items-center justify-center px-4 cursor-pointer group focus:outline-none"
-                    data-carousel-prev
-                >
-                    <span
-                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-800 group-hover:bg-blue-500  group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 1 1 5l4 4" />
-                        </svg>
-                        <span class="sr-only">Previous</span>
-                    </span>
-                </button>
-
-                <button 
-                    type="button"
-                    class="absolute top-1/2 end-0 z-30 flex items-center justify-center px-4 cursor-pointer group focus:outline-none"
-                    data-carousel-next
-                >
-                    <span
-                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-800 group-hover:bg-blue-500  group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 9 4-4-4-4" />
-                        </svg>
-                        <span class="sr-only">Next</span>
-                    </span>
-                </button>
+                <div class="swiper-pagination"></div>
             </div>
-
-            <!-- Done button -->
-            <button 
-                type="button" 
-                class="absolute bottom-0 z-30 right-0 py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
-            >
-                Үй жұмысына өту
-            </button>
+            
+            <!-- Initialize Swiper -->
+            <script>
+                var swiper = new Swiper(".lessonSwiper", {
+                    spaceBetween: 50,
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                });
+                var swiper2 = new Swiper(".lessonSwiper2", {
+                    direction: "vertical",
+                    spaceBetween: 50,
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true,
+                    },
+                });
+            </script>
         </div>
 
-        
         <!-- Lesson description -->
         <div class="w-full bg-white border-y border-gray-200 relative">
             {% if user_lesson.completed %}
@@ -100,7 +244,7 @@
                     <svg class="w-6 h-6 text-green-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                         <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm13.707-1.293a1 1 0 0 0-1.414-1.414L11 12.586l-1.793-1.793a1 1 0 0 0-1.414 1.414l2.5 2.5a1 1 0 0 0 1.414 0l4-4Z" clip-rule="evenodd"/>
                     </svg>
-                    <span>Сабақ орындалды!</span>
+                    <span>Сабақ аяқталды!</span>
                 </div>
             {% endif %}
             <ul 
@@ -194,38 +338,30 @@
                     <div class="max-w-screen-md w-full mx-auto grid gap-8">
                         <!-- Messages -->
                         <div class="grid gap-4">
-                            {% for item in chapters_with_lessons %}
+                            {% for item in comments %}
                                 <div class="flex items-start gap-2.5">
-                                    <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                                    <img 
+                                        class="w-8 h-8 rounded-full" 
+                                        src="{% if item.author.image %}{{ item.author.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}"
                                         alt="Jese image">
                                     <div class="flex flex-col gap-1 w-full">
                                         <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                                            <span class="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
-                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
+                                            <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.author.first_name }} {{ item.author.last_name }}</span>
+                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ item.created_at }}</span>
                                         </div>
                                         <div
                                             class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
                                             <div class="text-sm font-normal text-gray-900 dark:text-white">
-                                                Сабақ өте жақсы әрі түсінікті шыққан. Алдағы уақытта бұданда керемет контенттерді күтеміз!
+                                                {{ item.content }}
                                             </div>
                                         </div>
                                         
                                         <div class="flex items-center">
-                                            <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
-                                            <svg class="w-4 h-4 ms-1 text-gray-300 dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                            </svg>
+                                            {% for n in item.score|range_filter %}
+                                                <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                                </svg>
+                                            {% endfor %}
                                         </div>
                                     </div>
                                 </div>
@@ -233,17 +369,24 @@
                         </div>
 
                         <!-- Send form -->
-                        <form action="">
+                        <form method="post" action="{% url 'lesson_detail' user_subject.pk user_lesson.pk %}">
+                            {% csrf_token %}
                             <h1 class="text-2xl font-semibold pb-4 text-center">Кері байланыс орны</h1>
                             <div class="grid gap-4">
+                                <input type="hidden" name="action" value="submit_comment">
                                 <textarea 
-                                    id="message" rows="4" 
+                                    id="message"
+                                    name="content" 
+                                    rows="4" 
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                     placeholder="Сабақ жайлы ойыңыз..."></textarea>
 
-                                <select id="countries"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option selected>Сабаққа беретін бағаңыз</option>
+                                <select 
+                                    id="countries"
+                                    name="score"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                >
+                                    <option value="" selected>Сабаққа беретін бағаңыз</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -252,7 +395,7 @@
                                 </select>
 
                                 <button 
-                                    type="button" 
+                                    type="submit" 
                                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                                 >
                                     Пікір жіберу
