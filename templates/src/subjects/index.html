@@ -119,7 +119,7 @@
                                         {% for user in item.observers.all %}
                                             <img 
                                                 class="w-10 h-10 border-2 border-white rounded-full dark:border-gray-800" 
-                                                src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt=""
+                                                src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt=""
                                             >
                                         {% endfor %}
                                         <div class="flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">
