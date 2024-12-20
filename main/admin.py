@@ -1,4 +1,5 @@
 from django.contrib import admin
+from progress.models import Homework
 from .models import Category, Subject, Chapter, Lesson, TextContent, VideoContent, FrameContent, \
     LessonDocs
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
@@ -57,9 +58,14 @@ class FileDocTab(admin.TabularInline):
     extra = 0
 
 
+class HomeworkTab(SummernoteModelAdminMixin, admin.TabularInline):
+    model = Homework
+    extra = 0
+
+
 @admin.register(Lesson)
 class LessonAdmin(SummernoteModelAdmin):
-    list_display = ('title', 'chapter', 'order')
-    list_filter = ('subject', 'chapter',)
+    list_display = ('title', 'chapter', 'lesson_type', 'order')
+    list_filter = ('subject', 'chapter', 'lesson_type', )
     ordering = ('chapter', 'order')
-    inlines = (VideoContentTab, TextContentTab, FrameContentTab, FileDocTab, )
+    inlines = (TextContentTab, VideoContentTab, FrameContentTab, FileDocTab, HomeworkTab, )

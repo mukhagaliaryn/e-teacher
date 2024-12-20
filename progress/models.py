@@ -4,6 +4,7 @@ from main.models import Subject, Lesson
 from django.utils.translation import gettext_lazy as _
 
 
+# UserSubject model
 class UserSubject(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE,
@@ -24,6 +25,7 @@ class UserSubject(models.Model):
         return f"{self.user} - {self.subject.title}"
 
 
+# UserLesson model
 class UserLesson(models.Model):
     user_subject = models.ForeignKey(
         UserSubject, on_delete=models.CASCADE,
@@ -52,7 +54,7 @@ class Homework(models.Model):
         verbose_name=_('Сабақ'), related_name='homeworks'
     )
     title = models.CharField(_('Тақырыбы'), max_length=255)
-    content = models.TextField(_('Пікір'), blank=True, null=True)
+    content = models.TextField(_('Тапсырма мәтіні'), blank=True, null=True)
     file = models.FileField(_('Тапсырма құжаты'), upload_to='main/subject/homeworks/', blank=True, null=True)
 
     def __str__(self):
@@ -63,6 +65,7 @@ class Homework(models.Model):
         verbose_name_plural = _('Үй жұмыстары')
 
 
+# UserHomework model
 class UserHomework(models.Model):
     homework = models.ForeignKey(
         Homework, on_delete=models.PROTECT, related_name='homeworks',

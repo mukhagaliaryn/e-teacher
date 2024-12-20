@@ -55,12 +55,14 @@ def home(request):
                 lesson=lesson,
             )
             first_lesson_ids[user_subject.id] = user_lesson.id
+    user_homeworks = UserHomework.objects.filter(student=request.user)[:3]
 
     context = {
         'access_subjects': access_subjects,
         'my_subjects': my_subjects,
         'add_subjects': add_subjects,
-        'first_lesson_ids': first_lesson_ids
+        'first_lesson_ids': first_lesson_ids,
+        'user_homeworks': user_homeworks
     }
     return render(request, 'home/index.html', context)
 
@@ -139,16 +141,16 @@ def lesson_detail(request, user_subject_pk, user_lesson_pk):
     user_lesson = get_object_or_404(UserLesson, pk=user_lesson_pk, user_subject=user_subject)
     chapters = Chapter.objects.filter(subject=user_subject.subject).order_by('order')
     comments = Comment.objects.filter(lesson=user_lesson.lesson).order_by('created_at')
-    send_homeworks = [user_homework.homework for user_homework in request.user.homeworks.all()]
+    homeworks = Homework.objects.filter(lesson=user_lesson.lesson)
+    user_homeworks_done = UserHomework.objects.filter(student=request.user, homework__in=homeworks, is_done=True)
+    send_homeworks = [user_homework.homework for user_homework in request.user.homeworks.filter(homework__in=homeworks)]
 
     if request.method == 'POST':
         action = request.POST.get('action')
-        content = request.POST.get('content')
-        rating = request.POST.get('score')
-        homework_id = request.POST.get('homework_id')
-        homework = Homework.objects.filter(id=homework_id, lesson=user_lesson.lesson).first()
 
         if action == 'submit_comment':
+            content = request.POST.get('content')
+            rating = request.POST.get('score')
             if not content:
                 messages.error(request, 'Пікір мәтіні бос болмауы керек!')
             elif not rating or not rating.isdigit() or int(rating) not in range(1, 6):
@@ -163,24 +165,48 @@ def lesson_detail(request, user_subject_pk, user_lesson_pk):
                 messages.success(request, 'Пікіріңіз сәтті жіберілді!')
                 return redirect('lesson_detail', user_subject_pk=user_subject.pk, user_lesson_pk=user_lesson.pk)
 
-        elif action == 'submit_homework' and homework:
-            user_homework_file = request.FILES.get('user_homework_file')
-            if user_homework_file:
-                data = UserHomework(
-                    homework=homework,
-                    student=request.user,
-                    submission=user_homework_file
-                )
-                data.save()
-                messages.success(request, 'Тапсырма сәтті жіберілді!')
+        elif action == 'submit_homework':
+            homework_id = request.POST.get('homework_id')
+            homework = get_object_or_404(Homework, pk=homework_id)
+            submission = request.FILES.get('submission')
+
+            user_homework, created = UserHomework.objects.get_or_create(
+                student=request.user,
+                homework=homework
+            )
+            if submission:
+                user_homework.submission = submission
+                user_homework.save()
+                messages.success(request, f"Үй жұмысы '{homework.title}' сәтті жіберілді!")
                 return redirect('lesson_detail', user_subject_pk=user_subject.pk, user_lesson_pk=user_lesson.pk)
+            else:
+                messages.error(request, "Тапсырманы жіберу үшін құжатты тіркеу қажет!")
 
         elif action == 'complete_lesson':
+            total_score = sum(uh.grade for uh in user_homeworks_done)
+            count = user_homeworks_done.count()
+
+            if count > 0:
+                user_lesson.lesson_score = total_score / count
+            else:
+                user_lesson.lesson_score = 100
+
             user_lesson.completed = True
             user_lesson.completed_at = timezone.now()
-            if user_lesson.lesson.homeworks.all().count() <= 0:
-                user_lesson.lesson_score = 100
             user_lesson.save()
+
+            completed_lessons = UserLesson.objects.filter(
+                user_subject=user_subject, completed=True
+            )
+            total_score = sum(lesson.lesson_score for lesson in completed_lessons)
+
+            total_lessons = UserLesson.objects.filter(user_subject=user_subject).count()
+            if total_lessons > 0:
+                user_subject.total_percent = total_score / total_lessons
+            else:
+                user_subject.total_percent = 0
+
+            user_subject.save()
             messages.success(request, 'Сабақ аяқталды!')
 
     chapters_with_lessons = []
@@ -194,10 +220,17 @@ def lesson_detail(request, user_subject_pk, user_lesson_pk):
             'user_lessons': lessons
         })
 
-    next_user_lesson = UserLesson.objects.filter(
-        user_subject=user_subject,
-        lesson__order__gt=user_lesson.lesson.order
-    ).order_by('lesson__order').first()
+    next_lesson = Lesson.objects.filter(
+        chapter=user_lesson.lesson.chapter,
+        order__gt=user_lesson.lesson.order
+    ).order_by('order').first()
+
+    next_user_lesson = None
+    if next_lesson:
+        next_user_lesson = UserLesson.objects.filter(
+            user_subject=user_subject,
+            lesson=next_lesson
+        ).first()
 
     context = {
         'user_lesson': user_lesson,
@@ -205,7 +238,9 @@ def lesson_detail(request, user_subject_pk, user_lesson_pk):
         'chapters_with_lessons': chapters_with_lessons,
         'next_user_lesson': next_user_lesson,
         'comments': comments,
-        'send_homeworks': send_homeworks
+        'send_homeworks': send_homeworks,
+        'homeworks': homeworks,
+        'user_homeworks_done': user_homeworks_done,
     }
     return render(request, 'home/lesson_detail.html', context)
 

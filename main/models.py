@@ -48,7 +48,7 @@ class Chapter(models.Model):
     order = models.PositiveIntegerField(_('Order'))
 
     def __str__(self):
-        return f"{self.title} ({self.subject.title})"
+        return f"{self.subject.title}: {self.order}-модуль:{self.title}"
 
     class Meta:
         verbose_name = _('Модуль')
@@ -74,8 +74,8 @@ class Lesson(models.Model):
     title = models.CharField(_('Тақырыбы'), max_length=255)
     lesson_type = models.CharField(_('Сабақтың түрі'), choices=LESSON_TYPE, max_length=255)
     description = models.TextField(_('Анықтамасы'), blank=True, null=True)
-    order = models.PositiveIntegerField(_('Order'))
-    duration = models.PositiveSmallIntegerField(_('Видео уақыт'), default=0)
+    order = models.PositiveIntegerField(_('Order'), default=0)
+    duration = models.PositiveSmallIntegerField(_('Сабақтың уақыты (мин)'), default=0)
 
     def __str__(self):
         return f"{self.title} ({self.chapter.title})"

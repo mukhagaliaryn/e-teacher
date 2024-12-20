@@ -23,7 +23,7 @@ class UserHomeworkTab(admin.TabularInline):
 
 @admin.register(Homework)
 class HomeworkAdmin(SummernoteModelAdmin):
-    list_display = ('lesson', 'title', )
+    list_display = ('title', 'lesson', )
     search_fields = ('title',)
     list_filter = ('lesson', )
 

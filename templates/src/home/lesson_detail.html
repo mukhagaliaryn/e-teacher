@@ -21,7 +21,7 @@
                             <div class="swiper lessonSwiper2 swiper-v w-full h-full">
                                 <div class="swiper-wrapper">
                                     {% for item in user_lesson.lesson.text_contents.all %}
-                                        <div class="swiper-slide w-full h-full flex justify-center items-center">
+                                        <div class="swiper-slide w-full h-full p-8 flex justify-center items-center">
                                             <div class="max-w-screen-xl w-full grid gap-4">
                                                 <h1 class="text-2xl font-semibold text-center">Теориялық мәлімет</h1>
                                                 <div class="text-gray-500 text-justify">
@@ -108,33 +108,24 @@
                                 {% if next_user_lesson %}
                                     <a 
                                         href="{% url 'lesson_detail' user_subject.id next_user_lesson.id %}"
-                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                        class="inline-flex items-center gap-2 py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                     >
-                                        Келесі сабақ
-                                    </a>
-                                {% else %}
-                                    <a 
-                                        href="{% url 'home' %}"
-                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                                    >
-                                        Басты бетке қайту
+                                        Келесі сабақ 
+                                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                                        </svg>
                                     </a>
                                 {% endif %}
                             </div>
                         {% else %}
-                            {% if user_lesson.lesson.homeworks.all|length > 0 %}
+                            {% if homeworks %}
                                 <div class="swiper lessonSwiper2 swiper-v w-full h-full">
                                     <div class="swiper-wrapper">
-                                        {% for homework in user_lesson.lesson.homeworks.all %}
+                                        {% for homework in homeworks %}
                                             <div class="swiper-slide relative w-full h-full flex justify-center items-center">
                                                 <div class="grid gap-8 max-w-screen-md w-full text-center">
                                                     <div class="grid gap-4">
                                                         <h1 class="text-2xl font-semibold">Үй тапсырмасы: {{ homework.title }}</h1>
-                                                        {% if homework.homeworks.all|length > 0 %}
-                                                            <span class="text-gray-500">
-                                                                Куратордың сіз жіберген тапсырмаларға қойылатын бағасын күтіңіз!
-                                                            </span>
-                                                        {% endif %}
                                                         <div class="text-gray-500 text-justify">
                                                             {{ homework.content|safe }}
                                                         </div>
@@ -150,11 +141,10 @@
                                                             </svg>
                                                             <span class="sr-only">Info</span>
                                                             <div>
-                                                                Тапсырма жіберілді!
+                                                                Тапсырма жіберілді! Куратордың бағасын күтіңіз.
                                                             </div>
                                                         </div>
                                                     {% else %}
-                                                        <!-- Форма для отправки домашней работы -->
                                                         <form 
                                                             method="post" enctype="multipart/form-data"
                                                             class="grid gap-2"    
@@ -166,7 +156,7 @@
                                                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Құжат жүктеу</label>
                                                                 <input 
                                                                     id="file_input" 
-                                                                    name="user_homework_file" 
+                                                                    name="submission" 
                                                                     type="file" required
                                                                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                                                 >
@@ -178,16 +168,18 @@
                                                         </form>
                                                     {% endif %}
                                                 </div>
-
-                                                <form method="post" class="absolute bottom-4 right-4">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="action" value="complete_lesson">
-                                                    <button 
-                                                        type="submit" 
-                                                        class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                                        Сабақты аяқтау
-                                                    </button>
-                                                </form>
+                                                
+                                                {% if user_homeworks_done|length == homeworks|length %}
+                                                    <form method="post" class="absolute bottom-4 right-4">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="action" value="complete_lesson">
+                                                        <button 
+                                                            type="submit" 
+                                                            class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                                            Сабақты аяқтау
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -336,72 +328,85 @@
                     aria-labelledby="statistics-tab"
                 >
                     <div class="max-w-screen-md w-full mx-auto grid gap-8">
-                        <!-- Messages -->
-                        <div class="grid gap-4">
-                            {% for item in comments %}
-                                <div class="flex items-start gap-2.5">
-                                    <img 
-                                        class="w-8 h-8 rounded-full" 
-                                        src="{% if item.author.image %}{{ item.author.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}"
-                                        alt="Jese image">
-                                    <div class="flex flex-col gap-1 w-full">
-                                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                                            <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.author.first_name }} {{ item.author.last_name }}</span>
-                                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ item.created_at }}</span>
-                                        </div>
-                                        <div
-                                            class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                                            <div class="text-sm font-normal text-gray-900 dark:text-white">
-                                                {{ item.content }}
+                        {% if user_lesson.completed %}
+                            <!-- Messages -->
+                            <div class="grid gap-4">
+                                {% for item in comments %}
+                                    <div class="flex items-start gap-2.5">
+                                        <img 
+                                            class="w-8 h-8 rounded-full" 
+                                            src="{% if item.author.image %}{{ item.author.image.url }}{% else %}{% static 'images/user.png' %}{% endif %}"
+                                            alt="Jese image">
+                                        <div class="flex flex-col gap-1 w-full">
+                                            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.author.first_name }} {{ item.author.last_name }}</span>
+                                                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ item.created_at }}</span>
+                                            </div>
+                                            <div
+                                                class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                                                <div class="text-sm font-normal text-gray-900 dark:text-white">
+                                                    {{ item.content }}
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="flex items-center">
+                                                {% for n in item.score|range_filter %}
+                                                    <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                                    </svg>
+                                                {% endfor %}
                                             </div>
                                         </div>
-                                        
-                                        <div class="flex items-center">
-                                            {% for n in item.score|range_filter %}
-                                                <svg class="w-4 h-4 text-yellow-300 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                                                </svg>
-                                            {% endfor %}
-                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- Send form -->
-                        <form method="post" action="{% url 'lesson_detail' user_subject.pk user_lesson.pk %}">
-                            {% csrf_token %}
-                            <h1 class="text-2xl font-semibold pb-4 text-center">Кері байланыс орны</h1>
-                            <div class="grid gap-4">
-                                <input type="hidden" name="action" value="submit_comment">
-                                <textarea 
-                                    id="message"
-                                    name="content" 
-                                    rows="4" 
-                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                    placeholder="Сабақ жайлы ойыңыз..."></textarea>
-
-                                <select 
-                                    id="countries"
-                                    name="score"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                >
-                                    <option value="" selected>Сабаққа беретін бағаңыз</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-
-                                <button 
-                                    type="submit" 
-                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                >
-                                    Пікір жіберу
-                                </button>
+                                {% endfor %}
                             </div>
-                        </form>
+
+                            <!-- Send form -->
+                            <form method="post" action="{% url 'lesson_detail' user_subject.pk user_lesson.pk %}">
+                                {% csrf_token %}
+                                <h1 class="text-2xl font-semibold pb-4 text-center">Кері байланыс орны</h1>
+                                <div class="grid gap-4">
+                                    <input type="hidden" name="action" value="submit_comment">
+                                    <textarea 
+                                        id="message"
+                                        name="content" 
+                                        rows="4" 
+                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Сабақ жайлы ойыңыз..."></textarea>
+
+                                    <select 
+                                        id="countries"
+                                        name="score"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    >
+                                        <option value="" selected>Сабаққа беретін бағаңыз</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+
+                                    <button 
+                                        type="submit" 
+                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                                    >
+                                        Пікір жіберу
+                                    </button>
+                                </div>
+                            </form>
+                        {% else %}
+                            <div class="w-full text-center">
+                                <svg class="w-24 h-24 mx-auto mb-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M7.111 20A3.111 3.111 0 0 1 4 16.889v-12C4 4.398 4.398 4 4.889 4h4.444a.89.89 0 0 1 .89.889v12A3.111 3.111 0 0 1 7.11 20Zm0 0h12a.889.889 0 0 0 .889-.889v-4.444a.889.889 0 0 0-.889-.89h-4.389a.889.889 0 0 0-.62.253l-3.767 3.665a.933.933 0 0 0-.146.185c-.868 1.433-1.581 1.858-3.078 2.12Zm0-3.556h.009m7.933-10.927 3.143 3.143a.889.889 0 0 1 0 1.257l-7.974 7.974v-8.8l3.574-3.574a.889.889 0 0 1 1.257 0Z"/>
+                                </svg>
+                                <h1 class="text-2xl font-semibold">Сабақ аяқталған әлі жоқ!</h1>
+                                <span class="text-gray-500">
+                                    Кері байланыс немесе пікір қалдырғыңыз келсе, алдымен
+                                    сабақты аяқтауыңыз қажет
+                                </span>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -417,7 +422,8 @@
                     <button 
                         type="button"
                         class="flex justify-between text-lg w-full p-5 text-left font-medium text-gray-500 border-b border-gray-200 focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 gap-3"
-                        data-accordion-target="#accordion-collapse-body-{{ item.chapter.id }}" aria-expanded="true"
+                        data-accordion-target="#accordion-collapse-body-{{ item.chapter.id }}" 
+                        aria-expanded="true"
                         aria-controls="accordion-collapse-body-{{ item.chapter.id }}"
                     >
                         <span>{{ forloop.counter }} модуль: {{ item.chapter.title }}</span>
@@ -464,7 +470,7 @@
                                         {% endif %}
                                     </div>
                                     <div>
-                                        <h1 class="font-medium">{{ user_lesson.lesson.title }}</h1>
+                                        <h1 class="font-medium">{{ item.chapter.order }}.{{ user_lesson.lesson.order }}: {{ user_lesson.lesson.title }}</h1>
                                         <span class="block text-gray-500">{{ user_lesson.lesson.get_lesson_type_display }}</span>
                                     </div>
                                 </div>
