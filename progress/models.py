@@ -68,7 +68,11 @@ class Homework(models.Model):
 # UserHomework model
 class UserHomework(models.Model):
     homework = models.ForeignKey(
-        Homework, on_delete=models.PROTECT, related_name='homeworks',
+        Homework, on_delete=models.PROTECT, related_name='user_homeworks',
+        verbose_name=_('Үй жұмысы')
+    )
+    user_lesson = models.ForeignKey(
+        UserLesson, on_delete=models.CASCADE, related_name='user_homeworks',
         verbose_name=_('Үй жұмысы')
     )
     student = models.ForeignKey(

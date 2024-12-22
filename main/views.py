@@ -2,6 +2,8 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
+from accounts.models import User
 from main.models import Category, Subject, Lesson, Chapter
 from progress.models import UserSubject, UserLesson, Homework, Comment, UserHomework
 
@@ -56,13 +58,16 @@ def home(request):
             )
             first_lesson_ids[user_subject.id] = user_lesson.id
     user_homeworks = UserHomework.objects.filter(student=request.user)[:3]
+    done_homeworks = UserHomework.objects.filter(student=request.user, is_done=True)[:3]
 
     context = {
         'access_subjects': access_subjects,
         'my_subjects': my_subjects,
         'add_subjects': add_subjects,
         'first_lesson_ids': first_lesson_ids,
-        'user_homeworks': user_homeworks
+        'user_homeworks': user_homeworks,
+        'admin': get_object_or_404(User, is_superuser=True),
+        'done_homeworks': done_homeworks
     }
     return render(request, 'home/index.html', context)
 
@@ -172,6 +177,7 @@ def lesson_detail(request, user_subject_pk, user_lesson_pk):
 
             user_homework, created = UserHomework.objects.get_or_create(
                 student=request.user,
+                user_lesson=user_lesson,
                 homework=homework
             )
             if submission:

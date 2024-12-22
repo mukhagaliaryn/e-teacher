@@ -27,7 +27,7 @@
                                     <a href="{% url 'subject_detail' item.id %}">
                                         <img 
                                             class="rounded-t-lg" 
-                                            src="{% if item.poster %}{{ item.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" 
+                                            src="{% if item.poster %}{{ item.poster.url }}{% else %}{% static 'images/subject-poster.png' %}{% endif %}" 
                                             alt="product image" 
                                         />
                                     </a>
@@ -124,7 +124,7 @@
                         <a href="{% url 'lesson_detail' item.id first_lesson_ids|get_item:item.id %}" class="relative flex border overflow-hidden rounded-lg transition-all hover:bg-gray-100">
                             <img
                                 class="w-32 md:w-36 lg:w-48"
-                                src="{% if item.subject.poster %}{{ item.subject.poster.url }}{% else %}{% static 'images/poster.png' %}{% endif %}" 
+                                src="{% if item.subject.poster %}{{ item.subject.poster.url }}{% else %}{% static 'images/subject-poster.png' %}{% endif %}" 
                             >
 
                             <div class="flex-1 flex items-center justify-between py-2 px-4">
