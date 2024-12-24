@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from accounts.models import User
-from main.models import Category, Subject, Lesson, Chapter
+from main.models import Category, Subject, Lesson, Chapter, Course
 from progress.models import UserSubject, UserLesson, Homework, Comment, UserHomework
 
 
@@ -250,3 +250,25 @@ def lesson_detail(request, user_subject_pk, user_lesson_pk):
     }
     return render(request, 'home/lesson_detail.html', context)
 
+
+
+# Subjects view
+@login_required(login_url='/accounts/login/')
+def courses(request):
+    items = Course.objects.all()
+
+    context = {
+        'courses': items,
+    }
+    return render(request, 'home/courses.html', context)
+
+
+
+@login_required(login_url='/accounts/login/')
+def olympics(request):
+    items = Course.objects.all()
+
+    context = {
+        'courses': items,
+    }
+    return render(request, 'home/olympics.html', context)

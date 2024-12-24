@@ -1,3 +1,5 @@
+from email.policy import default
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from accounts.models import User
@@ -149,3 +151,42 @@ class FrameContent(models.Model):
     class Meta:
         verbose_name = _('Фрейм контент')
         verbose_name_plural = _('Фрейм контенттер')
+
+
+
+# Courses
+class Course(models.Model):
+    LN = (
+        ('ru', _('Русский')),
+        ('kz', _('Қазақша')),
+    )
+    title = models.CharField(_('Тақырыбы'), max_length=128)
+    poster = models.ImageField(_('Постер'), blank=True, null=True, upload_to='main/courses/posters')
+    duration = models.PositiveSmallIntegerField(_('Ұзақтығы (апта)'), default=0)
+    price = models.DecimalField(_('Бағасы'), max_digits=10, decimal_places=2)
+    ln = models.CharField(_('Тілі'), choices=LN, max_length=128)
+    order = models.PositiveIntegerField(_('Order'))
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Цифрлық курс')
+        verbose_name_plural = _('Цифрлық курстар')
+
+
+# Chapter model
+class Module(models.Model):
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE,
+        verbose_name=_('Цифрлық курс'), related_name="modules"
+    )
+    title = models.TextField(_('Тақырыбы'))
+    order = models.PositiveIntegerField(_('Order'))
+
+    def __str__(self):
+        return f"{self.course.title}: {self.order}-модуль:{self.title}"
+
+    class Meta:
+        verbose_name = _('Модуль')
+        verbose_name_plural = _('Модульдер')
