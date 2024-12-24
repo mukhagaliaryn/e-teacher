@@ -1,7 +1,7 @@
 from django.contrib import admin
 from progress.models import Homework
 from .models import Category, Subject, Chapter, Lesson, TextContent, VideoContent, FrameContent, \
-    LessonDocs, Module, Course
+    LessonDocs, Module, Course, Olympic, UserOlympic
 from django_summernote.admin import SummernoteModelAdmin, SummernoteModelAdminMixin
 
 
@@ -81,3 +81,16 @@ class CourseAdmin(SummernoteModelAdmin):
     list_display = ('title', 'duration', 'price', 'ln', 'order', )
     list_filter = ('ln',)
     inlines = (ModuleTab, )
+
+
+
+@admin.register(Olympic)
+class OlympicAdmin(SummernoteModelAdmin):
+    list_display = ('title', 'question_order', )
+    list_filter = ('question_order',)
+
+
+@admin.register(UserOlympic)
+class UserOlympicAdmin(SummernoteModelAdmin):
+    list_display = ('user', 'olympic', 'status', )
+    list_filter = ('user', 'olympic', 'status',)

@@ -56,157 +56,206 @@
     }
 </style>
 
-</head>
-
-<body>
-    <div class="container">
-        <h1 class="text-4xl font-semibold text-center">Фортуна рулеткасы</h1>
-        <div class="relative">
-            <div class="arrow"></div>
-            <canvas id="canvas" width="500" height="500"></canvas>
-        </div>
-
-        <button id="spin" type="button"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-            Айналдыру
-        </button>
-    </div>
-
-    <!-- Модальное окно -->
-    <div class="modals" id="modal">
-        <div class="bg-white max-w-screen-md p-5 rounded-xl w-full min-h-[420px] flex justify-center items-center relative">
-            <div class="grid gap-2">
-                <h1 class="text-2xl text-center font-semibold">Сұрақ нөмері: <span id="modal-header"></span></h1>
-                <div id="modal-content" class="text-gray-500"></div>
+<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 pt-8 2xl:container mx-auto">
+    <div>
+        <div class="container">
+            <div class="relative">
+                <div class="arrow"></div>
+                <canvas id="canvas" width="500" height="500"></canvas>
             </div>
-            <button 
-                id="modal-close"
-                class="absolute bottom-2 right-2 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            >
-                Жабу
+        
+            <button id="spin" type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Айналдыру
             </button>
         </div>
+        
+        <!-- Модальное окно -->
+        <div class="modals" id="modal">
+            <div class="bg-white max-w-screen-md p-5 rounded-xl w-full min-h-[420px] flex justify-center items-center relative">
+                <div class="grid gap-2">
+                    <h1 class="text-2xl text-center font-semibold">Сұрақ нөмері: <span id="modal-header"></span></h1>
+                    <div id="modal-content" class="text-gray-500"></div>
+                </div>
+                <button id="modal-close"
+                    class="absolute bottom-2 right-2 text-sm text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Жабу
+                </button>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // 🎯 Вопросы для секторов
-        const questions = [
-            "Өміріңіздегі ең қызықты оқиға қандай?",
-            "Бала кезіңізде армандаған мамандығыңыз қандай еді?",
-            "Сіз үшін ең маңызды құндылық не?",
-            "Сүйікті кітабыңыз қандай?",
-            "Сізге ең көп шабыт беретін адам кім?",
-            "Егер уақыт машинасы болса, қай кезеңге барғыңыз келеді?",
-            "Сүйікті фильміңіз немесе сериалыңыз қандай?",
-            "Сіз үшін ең ұмытылмас саяхат қандай болды?",
-            "Өзіңізді үш сөзбен қалай сипаттайсыз?",
-            "Сізді бақытты ететін нәрсе не?",
-            "Егер суперқабілет алатын болсаңыз, қандай қабілет таңдар едіңіз?",
-            "Өмірде қандай арманыңызды міндетті түрде орындағыңыз келеді?"
-        ];
+    <!-- Form -->
+     <div>
+        <h1 class="text-2xl font-semibold mb-4">Тапсырманы жіберу формасы</h1>
+        <form 
+            method="post" enctype="multipart/form-data"
+            class="grid gap-4"    
+        >
+            {% csrf_token %}
+            <select 
+                id="countries"
+                name="score"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+                <option value="" selected>Сұрақ нөмері</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="9">10</option>
+                <option value="9">11</option>
+                <option value="9">12</option>
+            </select>
 
-        let startAngle = 0;
-        const arc = Math.PI / (questions.length / 2);
-        let spinTimeout = null;
-        let spinAngleStart = 0;
-        let spinTime = 0;
-        let spinTimeTotal = 0;
+            <textarea 
+                id="message"
+                name="content"
+                rows="4" 
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                placeholder="Жауапты мәтін күйінде жазыңыз..."></textarea>
 
-        let ctx;
 
-        const modal = document.getElementById('modal');
-        const modalHead = document.getElementById('modal-header');
-        const modalContent = document.getElementById('modal-content');
-        const modalClose = document.getElementById('modal-close');
+            
+            <input 
+                id="file_input" 
+                name="submission" 
+                type="file" required
+                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            >
 
-        document.getElementById("spin").addEventListener("click", spin);
-        modalClose.addEventListener("click", () => {
-            modal.style.display = 'none';
-        });
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Тапсырманы жіберу
+            </button>
+        </form>
+     </div>
+</div>
 
-        // 🎨 Цвета для секторов
-        function getColor(index) {
-            const colors = ["#FF5733", "#FFC300", "#DAF7A6", "#C70039", "#900C3F", "#581845", "#1E90FF", "#FF69B4", "#7FFF00", "#FFD700", "#FF4500", "#ADFF2F"];
-            return colors[index % colors.length];
-        }
 
-        // 🎯 Отрисовка колеса
-        function drawRouletteWheel() {
-            const canvas = document.getElementById("canvas");
-            if (canvas.getContext) {
-                const outsideRadius = 200;
-                const textRadius = 160;
-                const insideRadius = 50;
+<script>
+    // 🎯 Вопросы для секторов
+    const questions = [
+        "Өміріңіздегі ең қызықты оқиға қандай?",
+        "Бала кезіңізде армандаған мамандығыңыз қандай еді?",
+        "Сіз үшін ең маңызды құндылық не?",
+        "Сүйікті кітабыңыз қандай?",
+        "Сізге ең көп шабыт беретін адам кім?",
+        "Егер уақыт машинасы болса, қай кезеңге барғыңыз келеді?",
+        "Сүйікті фильміңіз немесе сериалыңыз қандай?",
+        "Сіз үшін ең ұмытылмас саяхат қандай болды?",
+        "Өзіңізді үш сөзбен қалай сипаттайсыз?",
+        "Сізді бақытты ететін нәрсе не?",
+        "Егер суперқабілет алатын болсаңыз, қандай қабілет таңдар едіңіз?",
+        "Өмірде қандай арманыңызды міндетті түрде орындағыңыз келеді?"
+    ];
 
-                ctx = canvas.getContext("2d");
-                ctx.clearRect(0, 0, 500, 500);
+    let startAngle = 0;
+    const arc = Math.PI / (questions.length / 2);
+    let spinTimeout = null;
+    let spinAngleStart = 0;
+    let spinTime = 0;
+    let spinTimeTotal = 0;
 
-                ctx.strokeStyle = "black";
-                ctx.lineWidth = 2;
-                ctx.font = 'bold 16px Arial';
+    let ctx;
 
-                for (let i = 0; i < questions.length; i++) {
-                    const angle = startAngle + i * arc;
-                    ctx.fillStyle = getColor(i);
+    const modal = document.getElementById('modal');
+    const modalHead = document.getElementById('modal-header');
+    const modalContent = document.getElementById('modal-content');
+    const modalClose = document.getElementById('modal-close');
 
-                    ctx.beginPath();
-                    ctx.arc(250, 250, outsideRadius, angle, angle + arc, false);
-                    ctx.arc(250, 250, insideRadius, angle + arc, angle, true);
-                    ctx.stroke();
-                    ctx.fill();
+    document.getElementById("spin").addEventListener("click", spin);
+    modalClose.addEventListener("click", () => {
+        modal.style.display = 'none';
+    });
 
-                    ctx.save();
-                    ctx.fillStyle = "white";
-                    ctx.translate(
-                        250 + Math.cos(angle + arc / 2) * textRadius,
-                        250 + Math.sin(angle + arc / 2) * textRadius
-                    );
-                    ctx.rotate(angle + arc / 2 + Math.PI / 2);
-                    ctx.fillText(i + 1, -ctx.measureText(i + 1).width / 2, 0);
-                    ctx.restore();
-                }
+    // 🎨 Цвета для секторов
+    function getColor(index) {
+        const colors = ["#FF5733", "#FFC300", "#DAF7A6", "#C70039", "#900C3F", "#581845", "#1E90FF", "#FF69B4", "#7FFF00", "#FFD700", "#FF4500", "#ADFF2F"];
+        return colors[index % colors.length];
+    }
+
+    // 🎯 Отрисовка колеса
+    function drawRouletteWheel() {
+        const canvas = document.getElementById("canvas");
+        if (canvas.getContext) {
+            const outsideRadius = 200;
+            const textRadius = 160;
+            const insideRadius = 50;
+
+            ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, 500, 500);
+
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = 2;
+            ctx.font = 'bold 16px Arial';
+
+            for (let i = 0; i < questions.length; i++) {
+                const angle = startAngle + i * arc;
+                ctx.fillStyle = getColor(i);
+
+                ctx.beginPath();
+                ctx.arc(250, 250, outsideRadius, angle, angle + arc, false);
+                ctx.arc(250, 250, insideRadius, angle + arc, angle, true);
+                ctx.stroke();
+                ctx.fill();
+
+                ctx.save();
+                ctx.fillStyle = "white";
+                ctx.translate(
+                    250 + Math.cos(angle + arc / 2) * textRadius,
+                    250 + Math.sin(angle + arc / 2) * textRadius
+                );
+                ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                ctx.fillText(i + 1, -ctx.measureText(i + 1).width / 2, 0);
+                ctx.restore();
             }
         }
+    }
 
-        // 🌀 Вращение
-        function spin() {
-            spinAngleStart = Math.random() * 10 + 10;
-            spinTime = 0;
-            spinTimeTotal = Math.random() * 3 + 4 * 1000;
-            rotateWheel();
+    // 🌀 Вращение
+    function spin() {
+        spinAngleStart = Math.random() * 10 + 10;
+        spinTime = 0;
+        spinTimeTotal = Math.random() * 3 + 4 * 1000;
+        rotateWheel();
+    }
+
+    function rotateWheel() {
+        spinTime += 30;
+        if (spinTime >= spinTimeTotal) {
+            stopRotateWheel();
+            return;
         }
+        const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+        startAngle += (spinAngle * Math.PI / 180);
+        drawRouletteWheel();
+        spinTimeout = setTimeout(rotateWheel, 30);
+    }
 
-        function rotateWheel() {
-            spinTime += 30;
-            if (spinTime >= spinTimeTotal) {
-                stopRotateWheel();
-                return;
-            }
-            const spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
-            startAngle += (spinAngle * Math.PI / 180);
-            drawRouletteWheel();
-            spinTimeout = setTimeout(rotateWheel, 30);
-        }
+    // 🛑 Остановка колеса
+    function stopRotateWheel() {
+        clearTimeout(spinTimeout);
+        const degrees = (startAngle * 180 / Math.PI + 90) % 360;
+        const index = Math.floor((360 - degrees) / (360 / questions.length)) % questions.length;
 
-        // 🛑 Остановка колеса
-        function stopRotateWheel() {
-            clearTimeout(spinTimeout);
-            const degrees = (startAngle * 180 / Math.PI + 90) % 360;
-            const index = Math.floor((360 - degrees) / (360 / questions.length)) % questions.length;
-
-            const result = `🎯 ${questions[index]}`;
-            modalHead.textContent = index;
-            modalContent.textContent = result;
-            modal.style.display = 'flex';
-
-            drawRouletteWheel();
-        }
-
-        function easeOut(t, b, c, d) {
-            t /= d;
-            return -c * t * (t - 2) + b;
-        }
+        const result = `🎯 ${questions[index]}`;
+        modalHead.textContent = index;
+        modalContent.textContent = result;
+        modal.style.display = 'flex';
 
         drawRouletteWheel();
-    </script>
+    }
+
+    function easeOut(t, b, c, d) {
+        t /= d;
+        return -c * t * (t - 2) + b;
+    }
+
+    drawRouletteWheel();
+</script>
 {% endblock home_content %}

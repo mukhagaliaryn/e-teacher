@@ -190,3 +190,38 @@ class Module(models.Model):
     class Meta:
         verbose_name = _('Модуль')
         verbose_name_plural = _('Модульдер')
+
+
+
+# Olympic
+class Olympic(models.Model):
+    title = models.CharField(_('Тақырыбы'), max_length=128)
+    question = models.TextField(_('Мәтіні'), blank=True, null=True)
+    question_order = models.PositiveSmallIntegerField(_('Сұрақ нөмері'), default=0)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Олимпиада есебі')
+        verbose_name_plural = _('Олимпиада есептері')
+
+
+# User Olympic
+class UserOlympic(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='olympics'
+    )
+    olympic = models.ForeignKey(
+        Olympic, on_delete=models.CASCADE, related_name='user_olympics'
+    )
+    comment = models.TextField(_('Пікірі'), blank=True, null=True)
+    file = models.FileField(_('Файл'), upload_to='main/olympics/files/')
+    status = models.BooleanField(_('Статаус'), default=False)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Қолданушының олимпиада есебі')
+        verbose_name_plural = _('Қолданушылардың олимпиада есептері')
